@@ -87,72 +87,99 @@ new Swiper('.card-wrapper', {
   }
 });
 
-// Memory Game Logic
-const cards = document.querySelectorAll(".card");
-let matched = 0;
-let cardOne, cardTwo;
-let disableDeck = false;
+document.addEventListener('DOMContentLoaded', () => {
+  const cards = document.querySelectorAll('.card');
+  let hasFlippedCard = false;
+  let firstCard, secondCard;
+  let lockBoard = false;
+  let matchedPairs = 0;
+  const totalPairs = cards.length / 2;
 
-function flipCard({target: clickedCard}) {
-  if(cardOne !== clickedCard && !disableDeck) {
-    clickedCard.classList.add("flip");
-    if(!cardOne) {
-      return cardOne = clickedCard;
+  // Hàm xáo trộn thẻ
+  function shuffleCards() {
+    const cardsArray = Array.from(cards);
+    for (let i = cardsArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      cardsArray[i].parentNode.insertBefore(cardsArray[j], cardsArray[i]);
     }
-    cardTwo = clickedCard;
-    disableDeck = true;
-    let cardOneImg = cardOne.querySelector(".back-view img").src,
-        cardTwoImg = cardTwo.querySelector(".back-view img").src;
-    matchCards(cardOneImg, cardTwoImg);
   }
-}
 
-function matchCards(img1, img2) {
-  if(img1 === img2) {
-    matched++;
-    if(matched == 8) {
-      setTimeout(() => {
-        return shuffleCard();
-      }, 1000);
+  function flipCard() {
+    if (lockBoard) return;
+    if (this === firstCard) return;
+
+    this.classList.add('flip');
+
+    if (!hasFlippedCard) {
+      hasFlippedCard = true;
+      firstCard = this;
+      return;
     }
-    cardOne.removeEventListener("click", flipCard);
-    cardTwo.removeEventListener("click", flipCard);
-    cardOne = cardTwo = "";
-    return disableDeck = false;
+
+    hasFlippedCard = false;
+    secondCard = this;
+    checkForMatch();
   }
-  setTimeout(() => {
-    cardOne.classList.add("shake");
-    cardTwo.classList.add("shake");
-  }, 400);
 
-  setTimeout(() => {
-    cardOne.classList.remove("shake", "flip");
-    cardTwo.classList.remove("shake", "flip");
-    cardOne = cardTwo = "";
-    disableDeck = false;
-  }, 1200);
-}
+  function checkForMatch() {
+    if (firstCard.dataset.id === secondCard.dataset.id) {
+      matchedPairs++;
+      disableCards();
+      if (matchedPairs === totalPairs) {
+        setTimeout(resetGame, 1000); // Chờ 1 giây trước khi reset
+      }
+      return;
+    }
+    shakeCards(); // Thêm hiệu ứng rung khi chọn sai
+  }
 
-function shuffleCard() {
-  matched = 0;
-  disableDeck = false;
-  cardOne = cardTwo = "";
-  let arr = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
-  arr.sort(() => Math.random() > 0.5 ? 1 : -1);
-  cards.forEach((card, i) => {
-    card.classList.remove("flip");
-    let imgTag = card.querySelector(".back-view img");
-    imgTag.src = `https://via.placeholder.com/45?text=img-${arr[i]}`;
-    card.addEventListener("click", flipCard);
-  });
-}
+  function disableCards() {
+    firstCard.removeEventListener('click', flipCard);
+    secondCard.removeEventListener('click', flipCard);
+    resetBoard();
+  }
 
-shuffleCard();
-cards.forEach(card => {
-  card.addEventListener("click", flipCard);
+  function unflipCards() {
+    lockBoard = true;
+    setTimeout(() => {
+      firstCard.classList.remove('flip');
+      secondCard.classList.remove('flip');
+      resetBoard();
+    }, 1000);
+  }
+
+  function shakeCards() {
+    firstCard.classList.add('shake');
+    secondCard.classList.add('shake');
+    unflipCards();
+    setTimeout(() => {
+      firstCard.classList.remove('shake');
+      secondCard.classList.remove('shake');
+    }, 1000); // Loại bỏ hiệu ứng rung sau 1 giây
+  }
+
+  function resetBoard() {
+    [hasFlippedCard, lockBoard] = [false, false];
+    [firstCard, secondCard] = [null, null];
+  }
+
+  function resetGame() {
+    cards.forEach(card => {
+      card.classList.remove('flip');
+      card.addEventListener('click', flipCard);
+    });
+    matchedPairs = 0;
+    shuffleCards();
+  }
+
+  // Xáo trộn thẻ khi tải và thêm sự kiện click
+  shuffleCards();
+  cards.forEach(card => card.addEventListener('click', flipCard));
+
+  // Hiển thị section Memory Game
+  document.getElementById('memory').style.display = 'block';
 });
 
-// Drawing Canvas Logic
 const canvas = document.querySelector("canvas");
 const toolBtns = document.querySelectorAll(".tool");
 const fillColor = document.querySelector("#fill-color");
@@ -163,6 +190,7 @@ const clearCanvas = document.querySelector(".clear-canvas");
 const saveImg = document.querySelector(".save-img");
 const ctx = canvas ? canvas.getContext("2d") : null;
 
+// Global variables with default values
 let prevMouseX, prevMouseY, snapshot,
     isDrawing = false,
     selectedTool = "brush",
@@ -171,170 +199,140 @@ let prevMouseX, prevMouseY, snapshot,
 
 // Set canvas background to white
 const setCanvasBackground = () => {
-  if (ctx) {
+    if (!ctx) return;
     ctx.fillStyle = "#fff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = selectedColor;
-  }
+    ctx.fillStyle = selectedColor; // Reset fill style to selected color
 };
 
-// Resize canvas dynamically
-const resizeCanvas = () => {
-  if (canvas && ctx) {
+// Initialize canvas on load
+window.addEventListener("load", () => {
+    if (!canvas || !ctx) return;
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
     setCanvasBackground();
-  }
-};
-
-// Initialize canvas on load and resize
-window.addEventListener("load", resizeCanvas);
-window.addEventListener("resize", resizeCanvas);
+});
 
 // Draw rectangle
 const drawRect = (e) => {
-  if (!ctx) return;
-  const x = Math.min(e.offsetX, prevMouseX);
-  const y = Math.min(e.offsetY, prevMouseY);
-  const width = Math.abs(prevMouseX - e.offsetX);
-  const height = Math.abs(prevMouseY - e.offsetY);
-  if (!fillColor.checked) {
-    ctx.strokeRect(x, y, width, height);
-  } else {
-    ctx.fillRect(x, y, width, height);
-  }
+    if (!ctx) return;
+    const width = prevMouseX - e.offsetX;
+    const height = prevMouseY - e.offsetY;
+    if (!fillColor.checked) {
+        ctx.strokeRect(e.offsetX, e.offsetY, width, height);
+    } else {
+        ctx.fillRect(e.offsetX, e.offsetY, width, height);
+    }
 };
 
 // Draw circle
 const drawCircle = (e) => {
-  if (!ctx) return;
-  ctx.beginPath();
-  const radius = Math.sqrt(Math.pow((prevMouseX - e.offsetX), 2) + Math.pow((prevMouseY - e.offsetY), 2));
-  ctx.arc(prevMouseX, prevMouseY, radius, 0, 2 * Math.PI);
-  fillColor.checked ? ctx.fill() : ctx.stroke();
+    if (!ctx) return;
+    ctx.beginPath();
+    const radius = Math.sqrt(Math.pow((prevMouseX - e.offsetX), 2) + Math.pow((prevMouseY - e.offsetY), 2));
+    ctx.arc(prevMouseX, prevMouseY, radius, 0, 2 * Math.PI);
+    fillColor.checked ? ctx.fill() : ctx.stroke();
 };
 
 // Draw triangle
 const drawTriangle = (e) => {
-  if (!ctx) return;
-  ctx.beginPath();
-  ctx.moveTo(prevMouseX, prevMouseY);
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.lineTo(prevMouseX * 2 - e.offsetX, e.offsetY);
-  ctx.closePath();
-  fillColor.checked ? ctx.fill() : ctx.stroke();
-};
-
-// Get mouse or touch coordinates
-const getEventCoordinates = (e) => {
-  if (e.type.includes("touch")) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      offsetX: e.touches[0].clientX - rect.left,
-      offsetY: e.touches[0].clientY - rect.top
-    };
-  }
-  return { offsetX: e.offsetX, offsetY: e.offsetY };
+    if (!ctx) return;
+    ctx.beginPath();
+    ctx.moveTo(prevMouseX, prevMouseY);
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.lineTo(prevMouseX * 2 - e.offsetX, e.offsetY);
+    ctx.closePath();
+    fillColor.checked ? ctx.fill() : ctx.stroke();
 };
 
 // Start drawing
 const startDraw = (e) => {
-  if (!ctx) return;
-  e.preventDefault();
-  isDrawing = true;
-  const { offsetX, offsetY } = getEventCoordinates(e);
-  prevMouseX = offsetX;
-  prevMouseY = offsetY;
-  ctx.beginPath();
-  ctx.lineWidth = brushWidth;
-  ctx.strokeStyle = selectedTool === "eraser" ? "#fff" : selectedColor;
-  ctx.fillStyle = selectedColor;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-  snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    if (!ctx) return;
+    isDrawing = true;
+    prevMouseX = e.offsetX;
+    prevMouseY = e.offsetY;
+    ctx.beginPath();
+    ctx.lineWidth = brushWidth;
+    ctx.strokeStyle = selectedColor;
+    ctx.fillStyle = selectedColor;
+    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
 };
 
 // Draw on canvas
 const drawing = (e) => {
-  if (!isDrawing || !ctx) return;
-  e.preventDefault();
-  ctx.putImageData(snapshot, 0, 0);
-  const { offsetX, offsetY } = getEventCoordinates(e);
+    if (!isDrawing || !ctx) return;
+    ctx.putImageData(snapshot, 0, 0);
 
-  if (selectedTool === "brush" || selectedTool === "eraser") {
-    ctx.strokeStyle = selectedTool === "eraser" ? "#fff" : selectedColor;
-    ctx.lineTo(offsetX, offsetY);
-    ctx.stroke();
-  } else if (selectedTool === "rectangle") {
-    drawRect({ offsetX, offsetY });
-  } else if (selectedTool === "circle") {
-    drawCircle({ offsetX, offsetY });
-  } else if (selectedTool === "triangle") {
-    drawTriangle({ offsetX, offsetY });
-  }
+    if (selectedTool === "brush" || selectedTool === "eraser") {
+        ctx.strokeStyle = selectedTool === "eraser" ? "#fff" : selectedColor;
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+    } else if (selectedTool === "rectangle") {
+        drawRect(e);
+    } else if (selectedTool === "circle") {
+        drawCircle(e);
+    } else if (selectedTool === "triangle") {
+        drawTriangle(e);
+    }
 };
 
 // Stop drawing
-const stopDraw = (e) => {
-  e.preventDefault();
-  isDrawing = false;
-  if (ctx) ctx.beginPath();
+const stopDraw = () => {
+    isDrawing = false;
+    if (ctx) ctx.beginPath();
 };
 
 // Tool selection
 toolBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelector(".options .active")?.classList.remove("active");
-    btn.classList.add("active");
-    selectedTool = btn.id;
-  });
+    btn.addEventListener("click", () => {
+        document.querySelector(".options .active")?.classList.remove("active");
+        btn.classList.add("active");
+        selectedTool = btn.id;
+    });
 });
 
 // Brush size adjustment
-sizeSlider.addEventListener("input", () => {
-  brushWidth = sizeSlider.value;
+sizeSlider.addEventListener("change", () => {
+    brushWidth = sizeSlider.value;
 });
 
 // Color selection
 colorBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelector(".colors .option.selected")?.classList.remove("selected");
-    btn.classList.add("selected");
-    selectedColor = window.getComputedStyle(btn).getPropertyValue("background-color");
-  });
+    btn.addEventListener("click", () => {
+        document.querySelector(".options .selected")?.classList.remove("selected");
+        btn.classList.add("selected");
+        selectedColor = window.getComputedStyle(btn).getPropertyValue("background-color");
+    });
 });
 
 // Custom color picker
-colorPicker.addEventListener("input", () => {
-  colorPicker.parentElement.style.background = colorPicker.value;
-  colorPicker.parentElement.click();
+colorPicker.addEventListener("change", () => {
+    colorPicker.parentElement.style.background = colorPicker.value;
+    colorPicker.parentElement.click();
 });
 
 // Clear canvas
 clearCanvas.addEventListener("click", () => {
-  if (ctx) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    setCanvasBackground();
-  }
+    if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        setCanvasBackground();
+    }
 });
 
 // Save canvas as image
 saveImg.addEventListener("click", () => {
-  if (canvas) {
-    const link = document.createElement("a");
-    link.download = `${Date.now()}.jpg`;
-    link.href = canvas.toDataURL("image/jpeg");
-    link.click();
-  }
+    if (canvas) {
+        const link = document.createElement("a");
+        link.download = `${Date.now()}.jpg`;
+        link.href = canvas.toDataURL();
+        link.click();
+    }
 });
 
-// Canvas event listeners for mouse and touch
+// Canvas event listeners
 if (canvas) {
-  canvas.addEventListener("mousedown", startDraw);
-  canvas.addEventListener("mousemove", drawing);
-  canvas.addEventListener("mouseup", stopDraw);
-  canvas.addEventListener("mouseleave", stopDraw);
-  canvas.addEventListener("touchstart", startDraw);
-  canvas.addEventListener("touchmove", drawing);
-  canvas.addEventListener("touchend", stopDraw);
+    canvas.addEventListener("mousedown", startDraw);
+    canvas.addEventListener("mousemove", drawing);
+    canvas.addEventListener("mouseup", stopDraw);
+    canvas.addEventListener("mouseout", stopDraw); // Thêm event khi chuột ra khỏi canvas
 }
