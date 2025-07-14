@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile, Card Slider, Memory Game, and Drawing Canvas</title>
+  <!-- Import Google Fonts for consistent typography -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap">
+  <!-- Import Swiper CSS for card slider functionality -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- Import Material Icons for consistent iconography -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Import custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Site Navigation for Mobile -->
+  <nav class="site-nav">
+    <!-- Toggle button for sidebar on mobile -->
+    <button class="sidebar-toggle"><span class="material-icons">menu</span></button>
+  </nav>
+
+  <!-- Main Container with Sidebar and Content -->
+  <div class="container">
+    <!-- Sidebar Section -->
+    <aside class="sidebar">
+      <!-- Sidebar Header with Logo and Toggle -->
+      <div class="sidebar-header">
+        <img class="header-logo" src="https://via.placeholder.com/46" alt="logo">
+        <button class="sidebar-toggle"><span class="material-icons">chevron_left</span></button>
+      </div>
+
+      <!-- Sidebar Content with Search and Menu -->
+      <div class="sidebar-content">
+        <!-- Search Form -->
+        <div class="search-form">
+          <span class="material-icons">search</span>
+          <input type="text" placeholder="Search...">
+        </div>
+        <!-- Menu Links for Navigation -->
+        <ul class="menu-list">
+          <li><a href="#" class="menu-link active" data-section="profile"><span class="material-icons">person</span><span class="menu-label">Profile</span></a></li>
+          <li><a href="#" class="menu-link" data-section="slider"><span class="material-icons">slideshow</span><span class="menu-label">Card Slider</span></a></li>
+          <li><a href="#" class="menu-link" data-section="memory"><span class="material-icons">gamepad</span><span class="menu-label">Memory Game</span></a></li>
+          <li><a href="#" class="menu-link" data-section="drawing"><span class="material-icons">brush</span><span class="menu-label">Drawing Canvas</span></a></li>
+        </ul>
+      </div>
+
+      <!-- Sidebar Footer with Theme Toggle -->
+      <div class="sidebar-footer">
+        <button class="theme-toggle">
+          <span class="theme-label">
+            <span class="material-icons theme-icon">dark_mode</span>
+            <span class="theme-text">Dark Mode</span>
+          </span>
+          <span class="theme-toggle-track">
+            <span class="theme-toggle-indicator"></span>
+          </span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Profile Card Section -->
+      <section id="profile" class="content-section">
+        <div class="profile-section">
+          <div class="profile-card">
+            <div class="image">
+              <img src="https://via.placeholder.com/150?text=Profile" alt="Profile Picture" class="profile-pic">
+            </div>
+            <div class="data">
+              <h2>Trần Minh Trung</h2>
+              <span>Developer & Designer</span>
+            </div>
+            <div class="row">
+              <div class="info">
+                <h3>Following</h3>
+                <span>120</span>
+              </div>
+              <div class="info">
+                <h3>Followers</h3>
+                <span>5000</span>
+              </div>
+              <div class="info">
+                <h3>Posts</h3>
+                <span>209</span>
+              </div>
+            </div>
+            <div class="buttons">
+              <a href="#" class="btn">Message</a>
+              <a href="#" class="btn">Follow Me</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Card Slider Section -->
+      <section id="slider" class="content-section" style="display: none;">
+        <div class="card-wrapper swiper">
+          <ul class="card-list swiper-wrapper">
+            <li class="card-item swiper-slide">
+              <a href="#" class="card-link">
+                <img src="https://via.placeholder.com/300x169?text=Designer" alt="Card Image" class="card-image">
+                <p class="badge badge-designer">Designer</p>
+                <h2 class="card-title">Designer</h2>
+                <p class="card-description">Lorem ipsum dolor sit explicabo adipisicing elit</p>
+                <button class="card-button"><span class="material-icons">arrow_forward</span></button>
+              </a>
+            </li>
+            <li class="card-item swiper-slide">
+              <a href="#" class="card-link">
+                <img src="https://via.placeholder.com/300x169?text=Developer" alt="Card Image" class="card-image">
+                <p class="badge badge-developer">Developer</p>
+                <h2 class="card-title">Developer</h2>
+                <p class="card-description">Lorem ipsum dolor sit explicabo adipisicing elit</p>
+                <button class="card-button"><span class="material-icons">arrow_forward</span></button>
+              </a>
+            </li>
+            <li class="card-item swiper-slide">
+              <a href="#" class="card-link">
+                <img src="https://via.placeholder.com/300x169?text=Marketer" alt="Card Image" class="card-image">
+                <p class="badge badge-marketer">Marketer</p>
+                <h2 class="card-title">Marketer</h2>
+                <p class="card-description">Lorem ipsum dolor sit explicabo adipisicing elit</p>
+                <button class="card-button"><span class="material-icons">arrow_forward</span></button>
+              </a>
+            </li>
+            <li class="card-item swiper-slide">
+              <a href="#" class="card-link">
+                <img src="https://via.placeholder.com/300x169?text=Gamer" alt="Card Image" class="card-image">
+                <p class="badge badge-gamer">Gamer</p>
+                <h2 class="card-title">Gamer</h2>
+                <p class="card-description">Lorem ipsum dolor sit explicabo adipisicing elit</p>
+                <button class="card-button"><span class="material-icons">arrow_forward</span></button>
+              </a>
+            </li>
+            <li class="card-item swiper-slide">
+              <a href="#" class="card-link">
+                <img src="https://via.placeholder.com/300x169?text=Editor" alt="Card Image" class="card-image">
+                <p class="badge badge-editor">Editor</p>
+                <h2 class="card-title">Editor</h2>
+                <p class="card-description">Lorem ipsum dolor sit explicabo adipisicing elit</p>
+                <button class="card-button"><span class="material-icons">arrow_forward</span></button>
+              </a>
+            </li>
+          </ul>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev swiper-slide-button"></div>
+          <div class="swiper-button-next swiper-slide-button"></div>
+        </div>
+      </section>
+
+      <!-- Memory Game Section -->
+      <section id="memory" class="content-section" style="display: none;">
+        <div class="memory-game">
+          <div class="cards">
+            <div class="card" data-id="1">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-1" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="2">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-2" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="3">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-3" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="4">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-4" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="5">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-5" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="6">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-6" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="7">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-7" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="8">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-8" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="1">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-1" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="2">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-2" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="3">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-3" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="4">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-4" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="5">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-5" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="6">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-6" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="7">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-7" alt="card-img">
+              </div>
+            </div>
+            <div class="card" data-id="8">
+              <div class="view front-view">
+                <span class="material-icons">question_mark</span>
+              </div>
+              <div class="view back-view">
+                <img src="https://via.placeholder.com/45?text=img-8" alt="card-img">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Drawing Canvas Section -->
+      <section id="drawing" class="content-section" style="display: none;">
+        <div class="drawing-container">
+          <section class="tools-board">
+            <div class="row">
+              <label class="title">Shapes</label>
+              <ul class="options">
+                <li class="option tool" id="rectangle">
+                  <span class="material-icons">crop_square</span>
+                  <span>Rectangle</span>
+                </li>
+                <li class="option tool" id="circle">
+                  <span class="material-icons">circle</span>
+                  <span>Circle</span>
+                </li>
+                <li class="option tool" id="triangle">
+                  <span class="material-icons">change_history</span>
+                  <span>Triangle</span>
+                </li>
+                <li class="option">
+                  <input type="checkbox" id="fill-color">
+                  <label for="fill-color">Fill color</label>
+                </li>
+              </ul>
+            </div>
+            <div class="row">
+              <label class="title">Options</label>
+              <ul class="options">
+                <li class="option active tool" id="brush">
+                  <span class="material-icons">brush</span>
+                  <span>Brush</span>
+                </li>
+                <li class="option tool" id="eraser">
+                  <span class="material-icons">delete</span>
+                  <span>Eraser</span>
+                </li>
+                <li class="option">
+                  <input type="range" id="size-slider" min="1" max="30" value="5">
+                </li>
+              </ul>
+            </div>
+            <div class="row colors">
+              <label class="title">Colors</label>
+              <ul class="options">
+                <li class="option" style="background-color: #fff; border: 1px solid #bfbfbf;"></li>
+                <li class="option selected" style="background-color: #000;"></li>
+                <li class="option" style="background-color: #E02020;"></li>
+                <li class="option" style="background-color: #6DD400;"></li>
+                <li class="option">
+                  <input type="color" id="color-picker" value="#4A98F7">
+                </li>
+              </ul>
+            </div>
+            <div class="row drawing-buttons">
+              <button class="clear-canvas">Clear Canvas</button>
+              <button class="save-img">Save As Image</button>
+            </div>
+          </section>
+          <section class="drawing-board">
+            <canvas></canvas>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Swiper JS for Card Slider -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- Custom JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
