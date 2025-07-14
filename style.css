@@ -301,8 +301,18 @@ body.dark-theme .theme-toggle-indicator {
 .profile-section {
   display: flex;
   justify-content: center;
+  align-items: center; /* 👈 Căn giữa theo chiều dọc */
   width: 100%;
-  margin-bottom: 40px;
+  min-height: 100vh;
+  padding: 40px 20px; /* để không dính sát */
+}
+.profile-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url(images/back.jpg);
+  opacity: 0.3; /* mờ vừa đủ */
+  z-index: -1;
 }
 
 .profile-card {
@@ -315,7 +325,7 @@ body.dark-theme .theme-toggle-indicator {
   padding: 30px;
   border: 1px solid #ffffff40;
   box-shadow: 0 5px 20px var(--color-shadow);
-  background: var(--color-bg-sidebar);
+  background: hsla(195, 100%, 60%, 0.2);
 }
 
 .image {
@@ -504,12 +514,17 @@ body.dark-theme .theme-toggle-indicator {
 
 /* Memory Game Styles */
 .memory-game {
-  padding: 25px;
-  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
   background: var(--color-bg-secondary);
+  border-radius: 10px;
   box-shadow: 0 10px 30px var(--color-shadow);
   margin-bottom: 40px;
+  padding: 40px 20px;
 }
+
 
 .cards, .card, .view {
   display: flex;
@@ -518,22 +533,26 @@ body.dark-theme .theme-toggle-indicator {
 }
 
 .cards {
-  height: 400px;
-  width: 400px;
+  display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  width: 540px;
+  height: 540px;
+  gap: 10px;
 }
 
+
 .cards .card {
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
-  position: relative;
+  width: 120px;
+  height: 120px;
   perspective: 1000px;
   transform-style: preserve-3d;
-  height: calc(100% / 4 - 10px);
-  width: calc(100% / 4 - 10px);
+  position: relative;
+  user-select: none;
+  cursor: pointer;
 }
+
 
 .card.shake {
   animation: shake 0.35s ease-in-out;
@@ -578,6 +597,17 @@ body.dark-theme .theme-toggle-indicator {
 .card.flip .front-view {
   transform: rotateY(180deg);
 }
+.card-wrapper .card-list {
+  display: flex;
+  flex-wrap: nowrap; /* ❗ Không cho xuống dòng */
+  justify-content: center;
+  gap: 20px;
+  padding: 10px;
+  margin-top: 30px;
+  
+}
+
+
 
 /* Drawing Canvas Styles */
 .drawing-container {
