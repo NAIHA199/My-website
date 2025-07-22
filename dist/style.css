@@ -677,11 +677,11 @@ body.dark-theme .theme-toggle-indicator {
 }
 
 .card .front-view img {
-  width: 19px;
+  width: 80px;
 }
 
 .card .back-view img {
-  max-width: 45px;
+  max-width: 120px;
 }
 
 .card .back-view {
@@ -716,11 +716,11 @@ body.dark-theme .theme-toggle-indicator {
   }
 
   .card .front-view img {
-    width: 17px;
+    width: 30px;
   }
 
   .card .back-view img {
-    max-width: 40px;
+    max-width: 60px;
   }
 }
 
@@ -731,11 +731,11 @@ body.dark-theme .theme-toggle-indicator {
   }
 
   .card .front-view img {
-    width: 15px;
+    width: 25px;
   }
 
   .card .back-view img {
-    max-width: 35px;
+    max-width: 50px;
   }
 }
 
